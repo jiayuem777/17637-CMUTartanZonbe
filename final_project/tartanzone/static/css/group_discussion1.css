@@ -1,0 +1,23 @@
+#submit-answer {
+  margin-top: 20px;
+  margin-left: 1050px;
+}
+#your-answer {
+  margin-left: 10px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+#exampleFormControlTextarea6 {
+  margin-left: 20px;
+  width: 1100px;
+}
+
+#post-title-label {
+  margin-left: 15px;
+}
+
+#exampleInputEmail1 {
+  width:1100px;
+  margin-left: 20px;
+}

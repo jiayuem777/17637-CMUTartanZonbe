@@ -1,0 +1,199 @@
+<!doctype html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>document.getElementsByTagName("html")[0].className += " js";</script>
+  <link rel="stylesheet" href="static/css/scheduel.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/discussion.css' %}">
+
+  <!-- Font Awesome JS -->
+  <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+  <!-- Our Custom CSS -->
+  <title>Schedule</title>
+</head>
+<body>
+  <div class="container">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <ul class="nav navbar-nav">
+          <li>
+              <span>My schedule</span>
+
+              <a style="left:130%;" href="{% url 'my_course' %}" class="btn btn-default">My course</a>
+              <a style="left:135%;" href="{% url 'my_group' %}" class="btn btn-default">My Group</a>
+              <a style="left:140%;" href="{% url 'all_courses' %}" class="btn btn-default">All courses</a>
+
+          </li>
+        </ul>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-nav-demo">
+        <ul class="nav navbar-nav">
+          <li>
+              <a href="{% url 'my_group' %}">My group</a>
+          </li>
+          <li>
+              <a href="{% url 'my_course' %}">My course</a>
+          </li>
+          <li>
+              <a href="{% url 'all_courses' %}">All courses</a>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+
+    <h3>Time confliction:</h3>
+    {% if conflict %}
+    {% for c in conflict %}
+    <p>{{c}}</p>
+    {% endfor %}
+    {% else %}
+    <p>None<p>
+      {% endif %}
+
+    <br>
+  <header class="cd-main-header text-center flex flex-column flex-center">
+
+    <h1 class="text-xl">Course Schedule</h1>
+  </header>
+
+  <div class="cd-schedule cd-schedule--loading margin-top-lg margin-bottom-lg js-cd-schedule">
+    <div class="cd-schedule__timeline">
+      <ul>
+        <li><span>09:00</span></li>
+        <li><span>09:30</span></li>
+        <li><span>10:00</span></li>
+        <li><span>10:30</span></li>
+        <li><span>11:00</span></li>
+        <li><span>11:30</span></li>
+        <li><span>12:00</span></li>
+        <li><span>12:30</span></li>
+        <li><span>13:00</span></li>
+        <li><span>13:30</span></li>
+        <li><span>14:00</span></li>
+        <li><span>14:30</span></li>
+        <li><span>15:00</span></li>
+        <li><span>15:30</span></li>
+        <li><span>16:00</span></li>
+        <li><span>16:30</span></li>
+        <li><span>17:00</span></li>
+        <li><span>17:30</span></li>
+        <li><span>18:00</span></li>
+      </ul>
+    </div> <!-- .cd-schedule__timeline -->
+
+    <div class="cd-schedule__events">
+      <ul>
+        <li class="cd-schedule__group">
+          <div class="cd-schedule__top-info"><span>Monday</span></div>
+          {% if Monday %}
+          <ul>
+
+            {% for m in Monday %}
+            <li class="cd-schedule__event">
+              <a data-start="{{m.starttime}}" data-end="{{m.endtime}}" data-event="event-{{m.data_event}}" >
+                <em class="cd-schedule__name">{{m.course}}</em>
+              </a>
+            </li>
+
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </li>
+
+        <li class="cd-schedule__group">
+          <div class="cd-schedule__top-info"><span>Tuesday</span></div>
+
+          {% if Tuesday %}
+          <ul>
+            {% for m in Tuesday %}
+            <li class="cd-schedule__event">
+              <a data-start="{{m.starttime}}" data-end="{{m.endtime}}"  data-event="event-{{m.data_event}}" href="#0">
+                <em class="cd-schedule__name">{{m.course}}</em>
+              </a>
+            </li>
+
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </li>
+
+        <li class="cd-schedule__group">
+          <div class="cd-schedule__top-info"><span>Wednesday</span></div>
+
+          {% if Wednesday %}
+          <ul>
+            {% for m in Wednesday %}
+            <li class="cd-schedule__event">
+              <a data-start="{{m.starttime}}" data-end="{{m.endtime}}"  data-event="event-{{m.data_event}}" href="#0">
+                <em class="cd-schedule__name">{{m.course}}</em>
+              </a>
+            </li>
+
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </li>
+
+        <li class="cd-schedule__group">
+          <div class="cd-schedule__top-info"><span>Thursday</span></div>
+
+          {% if Thursday %}
+          <ul>
+            {% for m in Thursday %}
+            <li class="cd-schedule__event">
+              <a data-start="{{m.starttime}}" data-end="{{m.endtime}}" data-event="event-{{m.data_event}}">
+                <em class="cd-schedule__name">{{m.course}}</em>
+              </a>
+            </li>
+
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </li>
+
+        <li class="cd-schedule__group">
+          <div class="cd-schedule__top-info"><span>Friday</span></div>
+
+          {% if Friday %}
+          <ul>
+            {% for m in Friday %}
+            <li class="cd-schedule__event">
+              <a data-start="{{m.starttime}}" data-end="{{m.endtime}}"  data-event="event-{{m.data_event}}" href="#0">
+                <em class="cd-schedule__name">{{m.course}}</em>
+              </a>
+            </li>
+
+            {% endfor %}
+          </ul>
+          {% endif %}
+    </div>
+
+    <div class="cd-schedule-modal">
+      <header class="cd-schedule-modal__header">
+        <div class="cd-schedule-modal__content">
+          <span class="cd-schedule-modal__date"></span>
+        </div>
+
+      </header>
+
+
+      <a href="#0" class="cd-schedule-modal__close text-replace">Close</a>
+    </div>
+
+    <div class="cd-schedule__cover-layer"></div>
+  </div>
+  </div> <!-- .cd-schedule -->
+
+  <script src="static/js/scheduel_util.js"></script> <!-- util functions included in the CodyHouse framework -->
+  <script src="static/js/scheduel_main.js"></script>
+
+</body>
+</html>

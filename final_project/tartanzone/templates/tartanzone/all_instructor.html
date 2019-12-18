@@ -1,0 +1,415 @@
+{% extends "tartanzone/nav_base.html"%}
+
+{% block contents%}
+{% comment %} <!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+  <head>
+    <title>OneSchool &mdash; Website by Colorlib</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!-- <link href="https://fonts.googleapis.com/css?family=Muli:300,400,700,900" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,400,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="/static/fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/jquery.fancybox.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
+
+    <!-- <link rel="stylesheet" href="/static/fonts/flaticon/font/flaticon.css' %}"> -->
+
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  </head>
+  <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+
+  <div class="site-wrap">
+
+    <div class="site-mobile-menu site-navbar-target">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div>
+
+
+    <header class="site-navbar py-4 js-sticky-header site-navbar-target" role="banner">
+
+      <div class="container-fluid">
+        <div class="d-flex align-items-center">
+          <div class="site-logo mr-auto w-25"><a href="{% url 'all_courses' %}">Boom School</a></div>
+
+          <div class="mx-auto text-center">
+            <nav class="site-navigation position-relative text-right" role="navigation">
+              <ul class="site-menu main-menu js-clone-nav mx-auto d-none d-lg-block  m-0 p-0">
+                {% if student %}
+                <li><a href="{% url 'my_course' %}" class="nav-link">My course</a></li>
+                {% endif %}
+                <li><a href="{% url 'my_group' %}" class="nav-link">My group</a></li>
+                <li><a href="{% url 'all_courses' %}" class="nav-link">All courses</a></li>
+                <li><a href="{% url 'all_courses' %}" class="nav-link">All instructor</a></li>
+              </ul>
+            </nav>
+          </div>
+
+          <div class="ml-auto w-25">
+            <nav class="site-navigation position-relative text-right" role="navigation">
+              <ul class="site-menu main-menu site-menu-dark js-clone-nav mr-auto d-none d-lg-block m-0 p-0">
+                <li class="cta"><a href="{% url 'logout' %}" class="nav-link"><span>Log out</span></a></li>
+               {{request.user.username}}
+              </ul>
+            </nav>
+            <a href="#" class="d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black float-right"><span class="icon-menu h3"></span></a>
+          </div>
+        </div>
+      </div>
+
+    </header> {% endcomment %}
+
+    <div class="intro-section single-cover" id="home-section">
+
+      <div class="slide-1 " style="background-image: url('/static/images/img_2.jpg');" data-stellar-background-ratio="0.5">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-12">
+              <div class="row justify-content-center align-items-center text-center">
+                <div class="col-lg-6">
+                  <br>
+                  <h1 data-aos="fade-up" data-aos-delay="0">My Zone</h1>
+                  <p data-aos="fade-up" data-aos-delay="100">All instructors</p>
+                  <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Search
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <div style="margin: 20px;">
+                        <form action="{% url 'search_instructor' %}" method="post">
+                          {% csrf_token %}
+                          <input type="text" class="search" placeholder="  search by instructor name" name="search-name-input" required>
+
+                          <button type="submit" name="search-name" id="search-btn" class="btn btn-primary">Search</button>
+                        </form>
+                      </div>
+                      <div style="margin: 20px;">
+                        <form action="{% url 'search_instructor' %}" method="post">
+                          {% csrf_token %}
+{#                          <input type="text" class="search" placeholder="  search by instructor school" name="search-school-input" required>#}
+                          <input type="radio" class="search" value="SCS" name="search-school-input" required>School of Computer Science<br>
+                          <input type="radio" class="search" value="ENG" name="search-school-input" required>College of Engineering<br>
+                          <input type="radio" class="search" value="ART" name="search-school-input" required>College of Fine Arts<br>
+                          <input type="radio" class="search" value="HSS" name="search-school-input" required>Dietrich College of Humanities & Social Sciences<br>
+                          <input type="radio" class="search" value="HEI" name="search-school-input" required>College of Fine Arts<br>
+                          <input type="radio" class="search" value="SCI" name="search-school-input" required>Mellon College of Science<br>
+                          <input type="radio" class="search" value="TEP" name="search-school-input" required>Tepper School of Business<br>
+                          <button type="submit" name="search-school" id="search-btn-school" class="btn btn-primary">Search</button>
+                        </form>
+                      </div>
+
+                    </div>
+                  </div>
+                  {% if admin %}
+                  <br>
+                  <button class="btn btn-default" data-toggle="modal" data-target="#mymodal" type="button">Add an instructor</button>
+
+                  {% comment %} <button class="btn btn-default" id="btn-js"><a href="#">Add an instructor</a></button> {% endcomment %}
+                  {% endif %}
+                </div>
+
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section">
+    <div class="container">
+        <div class="row" align="center">
+          {% if search %}
+          <div>{{search}}</div>
+          <br><br><br>
+          {% endif %}
+          {% if no_found_name %}
+          <p>No instructor with such name!</p>
+          {% endif %}
+          {% if no_found_code %}
+          <p>No instructor with such school!</p>
+          {% endif %}
+
+        </div>
+    </div>
+<!--    <div class="container">-->
+<!--        {% if messages %}-->
+<!--          <ul class="messages">-->
+<!--            {% for message in messages %}-->
+<!--              <li class="{{ message.tags }}">{{ message }}</li>-->
+<!--                <br><br>-->
+<!--            {% endfor %}-->
+<!--          </ul>-->
+<!--        {% endif %}-->
+<!--    </div>-->
+<!--{#    <div class="container">#}-->
+<!--{#        {% if form.errors %}#}-->
+<!--{#            <script type="text/javascript">#}-->
+<!--{#            var formErrors = {% if form.errors %}true{% else %}false{% endif %};#}-->
+<!--{#            $(document).ready(function() {#}-->
+<!--{#                if (formErrors) {#}-->
+<!--{#                    $('#mymodal').modal({show: 'true'});#}-->
+<!--{#                }#}-->
+<!--{#            });#}-->
+<!--{#          </script>#}-->
+<!--{#        {% endif %}#}-->
+<!--{#    </div>#}-->
+      <div class="container">
+        <div class="row">
+              {% if instructor %}
+              {% for i in instructor %}
+
+              <div class="course bg-white h-100 align-self-stretch col-lg-4 col-sm-6">
+                <figure class="m-0">
+                {% if i.instructor_img.url %}
+                    <a href="{% url 'instructor_profile' i.id %}"><img src={{i.instructor_img.url}} alt="Image" class="img-fluid" width="300" height="300"></a>
+                {% else %}
+                    <a href="{% url 'instructor_profile' i.id %}"><img src='/static/images/img_2.jpg' alt="Image" class="img-fluid" width="300" height="300"></a>
+                {% endif %}
+                </figure>
+                <div class="course-inner-text py-4 px-4">
+                  <span class="course-price">instructor</span>
+                  <h3><a href="{% url 'instructor_profile' i.id %}">{{i.name}}</a></h3>
+                  <p class="line-limit-length">{{i.description}}</p>
+                  <p>{{ i.get_school_display }}</p>
+                  {% if admin %}
+                  <button class="btn btn-primary btn-edit" data-toggle="modal" data-target="#edit_{{i.id}}" type="button" id="{{i.id}}">Edit</button>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="modal fade editmodal" id="edit_{{i.id}}">
+            <!-- modal-dialog水平居中 -->
+              <div class="modal-dialog modal-sm" >
+                <div class="modal-content " style="width:700px;">
+                  <div class="modal-header">
+                    <!-- 给一个元素data-dimiss属性的话，可以通过点击该元素达到让目标消失的效果。 -->
+                    <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+
+                    <h4 class="modal-title">Edit</h4>
+                    <h5 class="modal-title">{{c.name}}</h5>
+                  </div>
+                  <form method="post" action="{% url 'edit_instructor' i.id %}">
+                    {% csrf_token %}
+                  <div class="modal-body">
+                    <p>
+                      Name: <input readonly="readonly" class="form-control" type="text" value="{{i.name}}" id="user_name" name="course_name"/>
+                      <br><br>
+                      Description:<textarea type="text" class="form-control" id="user_name" name="course_description">{{i.description}}</textarea>
+                      <br><br>
+                    </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Update" class="btn btn-primary">
+                    <a href="{% url 'delete_instructor' i.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+                  </div>
+
+                  </form>
+
+                </div>
+              </div>
+            </div>
+              {% endfor %}
+              {% endif %}
+
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="site-section courses-title bg-dark" id="courses-section">
+      <div class="container">
+        <div class="row mb-5 justify-content-center">
+          <div class="col-lg-7 text-center" data-aos="fade-up" data-aos-delay="">
+            <br><br>
+            <h2 class="section-title">Add a new course here</h2>
+            <button class="btn btn-default"><a href="{% url 'all_courses' %}">Add</a></button>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+
+    {% comment %} <footer class="footer-section bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <h3>About OneSchool</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro consectetur ut hic ipsum et veritatis corrupti. Itaque eius soluta optio dolorum temporibus in, atque, quos fugit sunt sit quaerat dicta.</p>
+          </div>
+
+          <div class="col-md-3 ml-auto">
+            <h3>Links</h3>
+            <ul class="list-unstyled footer-links">
+              <li><a href="{% url 'home' %}">Home</a></li>
+              <li><a href="{% url 'all_courses' %}">Courses</a></li>
+              <li><a href="{% url 'all_instructor' %}">Teachers</a></li>
+            </ul>
+          </div>
+
+
+        </div>
+
+        <div class="row pt-5 mt-5 text-center">
+          <div class="col-md-12">
+            <div class="border-top pt-5">
+            <p>
+        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" >Colorlib</a>
+        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+      </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </footer> {% endcomment %}
+
+  </div> <!-- .site-wrap -->
+
+  <div class="modal fade" id="mymodal">
+<!-- modal-dialog水平居中 -->
+  <div class="modal-dialog modal-sm" >
+    <div class="modal-content " style="width:700px;">
+      <div class="modal-header">
+        <!-- 给一个元素data-dimiss属性的话，可以通过点击该元素达到让目标消失的效果。 -->
+        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+        <h4 class="modal-title">Add an instructor:</h4>
+      </div>
+{#      <form method="post" action="{% url 'add_instructor' %}" enctype="multipart/form-data">#}
+      <div id="error-message" align="center"></div>
+      <form method="post" action="{% url 'add_instructor' %}" id="add-form" enctype="multipart/form-data">
+        {% csrf_token %}
+      <div class="modal-body">
+        <p>{{form.as_p}}</p>
+      </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+{#        <input type="submit" value="Add" class="btn btn-primary">#}
+        <button id="submit-add" class="btn btn-primary">Submit</button>
+      </div>
+<!--          {% if form.errors %}-->
+<!--              <li>something</li>-->
+<!--              <br>-->
+<!--              $(#mymodal).modal("show");-->
+<!--          {% endif %}-->
+{#      </form>#}
+    </div>
+  </div>
+</div>
+
+
+  {% comment %} <script src="/static/js/jquery-3.3.1.min.js"></script>
+  <script src="/static/js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="/static/js/jquery-ui.js"></script>
+  <script src="/static/js/popper.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/owl.carousel.min.js"></script>
+  <script src="/static/js/jquery.stellar.min.js"></script>
+  <script src="/static/js/jquery.countdown.min.js"></script>
+  <script src="/static/js/bootstrap-datepicker.min.js"></script>
+  <script src="/static/js/jquery.easing.1.3.js"></script>
+  <script src="/static/js/aos.js"></script>
+  <script src="/static/js/jquery.fancybox.min.js"></script>
+  <script src="/static/js/jquery.sticky.js"></script>
+  <script src="/static/js/main.js"></script>
+  <script src="js/main.js"></script> {% endcomment %}
+
+  <style type="text/css">
+    .line-limit-length{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    }
+  </style>
+
+  <script type="text/javascript">
+    var btn = document.getElementById("submit-add");
+    btn.addEventListener('click', function(e) {
+      console.log(1)
+      var form = $("#add-form");
+      var url = form.attr('action');
+      $.ajax({
+           type: "POST",
+           url: "{% url 'ajax_add_instructor' %}",
+           enctype: 'multipart/form-data',
+           data: form.serialize(), // serializes the form's elements.
+           success: function(result)
+           {
+               if (result['error'] == "") {
+                 form.submit();
+               } else {
+                 var div = $("#error-message");
+                 error = result['error']
+                 console.log(result['error']);
+                 var p1 = $("<p/>", {
+                   html: error['name']
+                 }).appendTo(div)
+
+               }
+
+
+           }
+         });
+    })
+
+    $('#btn-js').click(function() {
+      $('#mymodal').modal({
+        backdrop: "static"
+        //等同于data-backdrop，如果设置为true，则单击该背景时，
+        //模态弹出窗会关闭；如果设置为false，则单击该背景时，
+        //模态弹出窗不会关闭
+      })
+    })
+    $('.btn-edit').click(function() {
+      var id=this.id
+      //alert(id);
+      $('#edit_'+id).modal({
+        backdrop: "static"
+        //等同于data-backdrop，如果设置为true，则单击该背景时，
+        //模态弹出窗会关闭；如果设置为false，则单击该背景时，
+        //模态弹出窗不会关闭
+      })
+    })
+  </script>
+{#  <script>#}
+{#    document.formHasErrors = {% if form.errors %}true{% else %}false{% endif %};#}
+{#  </script>#}
+{#  <script>#}
+{#    $( document ).ready(function() {#}
+{#       if (document.formHasErrors) {#}
+{#           $('#mymodal').modal('toggle');#}
+{#       }#}
+{#    });#}
+{#  </script>#}
+
+
+
+  {% comment %} </body>
+</html> {% endcomment %}
+
+{% endblock %}

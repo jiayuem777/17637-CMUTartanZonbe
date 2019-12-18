@@ -1,0 +1,567 @@
+
+
+{% extends "tartanzone/nav_base.html"%}
+{% block contents%}
+
+
+
+    <div class="intro-section single-cover" id="home-section">
+
+      <div class="slide-1 " style="background-image: url('/static/images/img_2.jpg');" data-stellar-background-ratio="0.5">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-12">
+              <div class="row justify-content-center align-items-center text-center">
+                <div class="col-lg-6">
+                  <br>
+                  <h1 data-aos="fade-up" data-aos-delay="0">{{course.code}}: {{course.name}}</h1>
+                  <p data-aos="fade-up" data-aos-delay="100">Semester: {{course.get_semester_display}} &bullet; Quota: {{course.quota}} &bullet;</p>
+                </div>
+
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mb-5">
+
+            <div class="mb-5">
+              <h3 class="text-black">Course Description</h3>
+              <p class="mb-4">
+                <strong class="text-black mr-3">Schedule: </strong>
+                {% for s in course.schedule.all %}
+                <div style="color:blue;">{{s.weekday}}: {{s.starttime}} - {{s.endtime}}</div>
+                {% endfor %}
+              </p>
+              {% if admin %}
+              <button class="btn btn-primary" data-toggle="modal" data-target="#mymodal" type="button">Add a schedule</a></button>
+              {% endif %}
+              <p>{{course.description}}</p>
+              {% if student %}
+              <p class="mt-4"><a href="{% url 'add_to_my_course' course.id %}" class="btn btn-primary">Add to my course</a></p>
+              {% endif %}
+            </div>
+
+            {% if average_score %}
+            <div class="pt-5">
+              <span class="heading">Students Rating</span>
+              {% if five_average %}
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              {% endif %}
+              {% if four_average %}
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star"></span>
+              {% endif %}
+              {% if three_average %}
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star"></span>
+              <span class="fa fa-star"></span>
+              {% endif %}
+              {% if two_average %}
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star"></span>
+              <span class="fa fa-star"></span>
+              <span class="fa fa-star"></span>
+              {% endif %}
+              {% if one_average %}
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star"></span>
+              <span class="fa fa-star"></span>
+              <span class="fa fa-star"></span>
+              <span class="fa fa-star"></span>
+              {% endif %}
+              <p>{{average_score}} average based on {{review_num}} reviews.</p>
+              <hr style="border:3px solid #f1f1f1">
+
+              <div class="row">
+                <div class="side">
+                  <div>5 star</div>
+                </div>
+                <div class="middle">
+                  <div class="bar-container">
+                    <div class="bar-5" id="bar-5" style="width: {{five_ratio}}%;"></div>
+                  </div>
+                </div>
+                <div class="side right">
+                  <div>{{five_num}}</div>
+                </div>
+                <div class="side">
+                  <div>4 star</div>
+                </div>
+                <div class="middle">
+                  <div class="bar-container">
+                    <div class="bar-4" style="width: {{four_ratio}}%;"></div>
+                  </div>
+                </div>
+                <div class="side right">
+                  <div>{{four_num}}</div>
+                </div>
+                <div class="side">
+                  <div>3 star</div>
+                </div>
+                <div class="middle">
+                  <div class="bar-container">
+                    <div class="bar-3" style="width: {{three_ratio}}%;"></div>
+                  </div>
+                </div>
+                <div class="side right">
+                  <div>{{three_num}}</div>
+                </div>
+                <div class="side">
+                  <div>2 star</div>
+                </div>
+                <div class="middle">
+                  <div class="bar-container">
+                    <div class="bar-2" style="width: {{two_ratio}}%;"></div>
+                  </div>
+                </div>
+                <div class="side right">
+                  <div>{{two_num}}</div>
+                </div>
+                <div class="side">
+                  <div>1 star</div>
+                </div>
+                <div class="middle">
+                  <div class="bar-container">
+                    <div class="bar-1" style="width: {{one_ratio}}%;"></div>
+                  </div>
+                </div>
+                <div class="side right">
+                  <div>{{one_num}}</div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+
+            <div class="pt-5">
+              <h3 class="mb-5">Course Review</h3>
+              <ul class="comment-list">
+                {% for r in review %}
+                <li class="comment">
+                  <div class="vcard bio">
+                    <img src="/static/images/person_1.jpg" alt="Image placeholder">
+                  </div>
+                  <div class="comment-body">
+                    <h3>{{r.student}}</h3>
+                    <div class="meta">{{r.time}}</div>
+                    <div class="score" align="right">Score:
+                    {% if r.five_star %}
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    {% endif %}
+                    {% if r.four_star %}
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                    {% endif %}
+                    {% if r.three_star %}
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    {% endif %}
+                    {% if r.two_star %}
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    {% endif %}
+                    {% if r.one_star %}
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    {% endif %}
+                  </div>
+                    <p>{{r.content}}</p>
+                    <p><button class="reply agree btn" value="{{r.id}}">agree</button>    <button class="reply disagree btn" value="{{r.id}}">disagree</button>   <span id="{{r.id}}">    {{r.agree}} </span></p>
+                  </div>
+                </li>
+                {% if admin %}
+                <p class="mt-4"><a href="{% url 'delete_review' r.id course.id %}" class="btn btn-primary">Delete review</a></p>
+                {% endif %}
+                {% endfor %}
+              </ul>
+              <a href="{% url 'all_reviews' course.id%}" class="btn btn-primary">View all reviews</a>
+              <!-- END comment-list -->
+
+              <div class="comment-form-wrap pt-5">
+                <h3 class="mb-5">Leave a Review</h3>
+                {% if error %}
+                <div align="center">{{error}}</div>
+                {% endif %}
+                <form action="{% url 'leave_review' course.id %}" class="p-5 bg-light" method="post">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="message">Score</label>
+                    <div class="form-check" style="left: 30px;">
+                      <div>
+                        <input type="radio" class="form-check-input" id="radio5" name="review-score" value="5">
+                        <label class="form-check-label" for="radio5">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span> Very satisfied </span>
+                        </label>
+                      </div>
+                      <div>
+                        <input type="radio" class="form-check-input" id="radio4" name="review-score" value="4">
+                        <label class="form-check-label" for="radio4">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star"></span>
+                          <span> Satisfied </span>
+                        </label>
+                      </div>
+                      <div>
+                        <input type="radio" class="form-check-input" id="radio3" name="review-score" value="3">
+                        <label class="form-check-label" for="radio3">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span> Neutral </span>
+                        </label>
+                      </div>
+                      <div>
+                        <input type="radio" class="form-check-input" id="radio2" name="review-score" value="2">
+                        <label class="form-check-label" for="radio2">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span> Not so satisfied </span>
+                        </label>
+                      </div>
+                      <div>
+                        <input type="radio" class="form-check-input" id="radio1" name="review-score" value="1">
+                        <label class="form-check-label" for="radio1">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                          <span> Not satisfied at all </span>
+                        </label>
+                      </div>
+                    </div>
+                    <br>
+                    <label for="message">Message</label>
+                    <textarea name="message" id="message" cols="30" rows="10" class="form-control"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <input type="submit" value="Post Review" class="btn btn-primary">
+                  </div>
+
+                </form>
+              </div>
+            </div>
+
+
+
+          </div>
+          <div class="col-lg-4 pl-lg-5">
+
+            <div class="mb-5 text-center border rounded course-instructor">
+              <h3 class="mb-5 text-black text-uppercase h6 border-bottom pb-3">Course Instructor</h3>
+              {% for i in instructor%}
+              <div class="mb-4 text-center">
+                <img src="{{ i.instructor_img.url }}" alt="Image" class="w-25 rounded-circle mb-4">
+                <h3 class="h5 text-black mb-4"><a href="{% url 'instructor_profile' i.id %}">{{i.name}}</a></h3>
+                <p>{{i.description}}</p>
+              </div>
+              {% endfor %}
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section courses-title bg-dark" id="courses-section">
+      <div class="container">
+        <div class="row mb-5 justify-content-center">
+          <div class="col-lg-7 text-center" data-aos="fade-up" data-aos-delay="">
+            <h2 class="section-title">Groups</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% csrf_token %}
+    <div class="site-section courses-entry-wrap"  data-aos="fade" data-aos-delay="100">
+      <div class="container">
+        <div class="row">
+        {% for g in groupobjs %}
+            <div>
+              <form action="{% url 'join_group' course.id %}" method="post" id = "add-form{{g.name}}" enctype="multipart/form-data"class="course bg-white h-100 align-self-stretch col-lg-4 col-sm-6">
+              <input name="groupname" value="{{g.name}}" type = "hidden">
+
+              <figure class="m-0">
+                <a href="course-single.html"><img src="/static/images/group1.jpg" alt="Image" class="img-fluid"></a>
+              </figure>
+
+              <div class="course-inner-text py-4 px-4">
+                <h3><a href="#">{{g.name}}</a></h3>
+                <ul>Members
+                 <div id = "member{{g.name}}"> </div>
+
+                  {% for m in g.member.all%}
+                  <input name = "{{g.name}}" value = "{{m.user.username}}" hidden = true > </input>
+                    <li>
+                     {{m.user.username}}
+
+
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+
+              <div class="d-flex border-top stats">
+
+                {% comment %} {% for m in g.member.all%}
+                {% if request.user == m.user %}
+                 <button class="btn col-6 btn-primary" type="submit" name = "action" value = "quit">Quit this group</button>
+                 {% endif %}
+                 {% endfor %} {% endcomment %}
+                {% comment %} <button class="btn col-6 btn-primary" type="submit" name = "action" value = "quit" hidden = true id = "quit{{g.name}}">Quit this group</button> {% endcomment %}
+
+
+
+              </div>
+
+              </form>
+
+
+            </div>
+                {% comment %} <button class="btn btn-primary" type="submit" name = "action" value = "join" id = "submit-join{{g.name}}" onclick = "join('{{g.name}}')" >Join this group</button> {% endcomment %}
+
+
+          {% endfor %}
+
+
+
+          </div>
+      </div>
+  </div>
+
+
+
+        <br><br>
+        <div class="row justify-content-center">
+        {% comment %} {% if user.role == 'administrator'%}
+          <div class="col-7 text-center">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#myModal" type="button">Create a new group</button>
+          </div>
+        {% endif %} {% endcomment %}
+        </div>
+        <br><br><br>
+      </div>
+
+
+  </div> <!-- .site-wrap -->
+
+  <div class="modal fade" id="mymodal">
+<!-- modal-dialog水平居中 -->
+  <div class="modal-dialog modal-sm" >
+    <div class="modal-content " style="width:450px;">
+      <div class="modal-header">
+        <!-- 给一个元素data-dimiss属性的话，可以通过点击该元素达到让目标消失的效果。 -->
+        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+        <h4 class="modal-title">Add a schedule:</h4>
+      </div>
+{#      <form method="post" action="{% url 'add_schedule' course.id %}">#}
+      <div id="error-message" align="center"></div>
+      <form method="post" action="{% url 'add_schedule' course.id %}" id="add-form" enctype="multipart/form-data">
+      <div class="modal-body">
+
+          {% csrf_token %}
+        <p>{{form.as_p}}</p>
+
+      </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+{#        <input type="submit" value="Add" class="btn btn-primary">#}
+        <button id="submit-add" class="btn btn-primary">Submit</button>
+      </div>
+
+{#      </form>#}
+    </div>
+  </div>
+</div>
+
+
+  <script type="text/javascript">
+
+        var btn = document.getElementById("submit-add");
+        btn.addEventListener('click', function(e) {
+          console.log(1)
+          var form = $("#add-form");
+          var url = form.attr('action');
+          $.ajax({
+               type: "POST",
+               url: "{% url 'ajax_add_schedule' %}",
+               enctype: 'multipart/form-data',
+               data: form.serialize(), // serializes the form's elements.
+               success: function(result)
+               {
+                   if (result['error'] == "") {
+                     form.submit();
+                   } else {
+                     var div = $("#error-message");
+                     error = result['error']
+                     console.log(result['error']);
+                     var p1 = $("<p/>", {
+                       html: error['starttime']
+                     }).appendTo(div)
+                     var p2 = $("<p/>", {
+                       html: error['endtime']
+                     }).appendTo(div)
+                   }
+               }
+             });
+        })
+
+          var agreeBtn = document.getElementsByClassName("agree");
+          console.log(agreeBtn);
+          for (var i = 0; i < agreeBtn.length; i++) {
+            agreeBtn[i].addEventListener('click', function(e) {
+              var btn = e.target;
+              $.ajax({
+                type:"POST",
+                url:'{% url 'ajax_agree' %}',
+                data: {
+                  review_id: btn.value,
+                  csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                },
+                success:function(result) {
+                  success = result['success'];
+                  if (success == "no") {
+                    alert("You have already agreed with this review.");
+                  }
+                  agree_num = result['agree_num'];
+                  var span = document.getElementById(btn.value);
+                  span.innerHTML = agree_num;
+                }
+              });
+            });
+          }
+
+
+
+          var disagreeBtn = document.getElementsByClassName("disagree");
+          console.log(disagreeBtn);
+          for (var i = 0; i < disagreeBtn.length; i++) {
+            disagreeBtn[i].addEventListener('click', function(e) {
+              var btn = e.target;
+              $.ajax({
+                type:"POST",
+                url:'{% url 'ajax_disagree' %}',
+                data: {
+                  review_id: btn.value,
+                  csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                },
+                success:function(result) {
+                  success = result['success'];
+                  if (success == "no") {
+                    alert("You haven't agreed with this review, cannot disagree.");
+                  } else if (success == "mistake") {
+                    alert("The agree num of this review is 0!");
+                  }
+                  agree_num = result['agree_num'];
+                  var span = document.getElementById(btn.value);
+                  span.innerHTML = agree_num;
+                }
+              });
+            });
+          }
+
+        {% comment %} var btn = document.getElementById("submit-join"); {% endcomment %}
+        //  btn.addEventListener('click', function(e) {
+          function join(name){
+            console.log("1");
+            var form = $("#add-form"+name+"");
+            var url = form.attr('action');
+            $.ajax({
+                type: "POST",
+                url: url,
+                enctype: 'multipart/form-data',
+                data: form.serialize(), // serializes the form's elements.
+                success: function(result)
+                {
+                    if (result['error'] == "") {
+                      var input = $("#member"+name+"");
+                      var quit = $("#quit"+name+"");
+                      var join = $("#submit-join"+name+"");
+                      //var div = $("#quit");
+                      alert("Join group successful");
+                        var p1 = $("<li>", {
+                        html: result['course']
+                      }).appendTo(input)
+                      quit.removeAttr("hidden")
+                      join.hide()
+                     // form.submit();
+                    } else {
+                      alert("You already in this group, please try again!");
+                      var div = $("#error-message");
+                      error = result['error']
+                    }
+
+                }
+              });
+          }
+
+
+          $('#btn-js').click(function() {
+            $('#mymodal').modal({
+              backdrop: "static"
+              //等同于data-backdrop，如果设置为true，则单击该背景时，
+              //模态弹出窗会关闭；如果设置为false，则单击该背景时，
+              //模态弹出窗不会关闭
+            })
+          })
+
+          $('.btn-edit').click(function() {
+            var id=this.id
+            //alert(id);
+            $('#edit_'+id).modal({
+              backdrop: "static"
+              //等同于data-backdrop，如果设置为true，则单击该背景时，
+              //模态弹出窗会关闭；如果设置为false，则单击该背景时，
+              //模态弹出窗不会关闭
+            })
+          })
+  </script>
+  {% endblock %}

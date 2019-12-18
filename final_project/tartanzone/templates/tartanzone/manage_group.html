@@ -1,0 +1,166 @@
+{% extends "tartanzone/nav_base.html"%}
+{% block contents%}
+
+    <div class="intro-section single-cover" id="home-section">
+
+      <div class="slide-1 " style="background-image: url('/static/images/img_2.jpg');" data-stellar-background-ratio="0.5">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-12">
+              <div class="row justify-content-center align-items-center text-center">
+                <div class="col-lg-6">
+                  <br>
+                  <h1 data-aos="fade-up" data-aos-delay="0">Administrator: {{request.user}}</h1>
+                  <p data-aos="fade-up" data-aos-delay="100">Manage all groups &bullet;</p>
+                </div>
+
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+   <div class="site-section courses-title bg-dark" id="courses-section">
+      <div class="container">
+        <div class="row mb-5 justify-content-center">
+          <div class="col-lg-7 text-center" data-aos="fade-up" data-aos-delay="">
+            {% comment %} <h2 class="section-title">Groups</h2> {% endcomment %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+ {% csrf_token %}
+    <div class="site-section courses-entry-wrap"  data-aos="fade" data-aos-delay="100">
+      <div class="container">
+        <div class="row">
+        {% for g in groupobjs %}
+            <form action="{% url 'delete_group'%}" method="post" class="course bg-white h-100 align-self-stretch col-lg-4 col-sm-6">
+            <div >
+            <input name="groupname" value="{{g.name}}" type = "hidden">
+              <figure class="m-0">
+                <a href="course-single.html"><img src="/static/images/group1.jpg" alt="Image" class="img-fluid"></a>
+              </figure>
+              <div class="course-inner-text py-4 px-4">
+              
+                <h3><a href="#">{{g.course.name}}</a></h3>
+                <h3><a href="#">{{g.name}} </a></h3>
+                <ul>Members
+                  {% for m in g.member.all%}
+                  <input name = "{{g.name}}" value = "{{m.user.username}}" hidden = true> </input>
+                    <li>
+                    {% comment %} <form form = "form2" action="{% url 'delete_member' m.user.username %}" method="post" class="course bg-white h-100 align-self-stretch col-lg-4 col-sm-6"> {% endcomment %}
+            
+                    {% comment %} <a href="{% url 'delete_member' m.user.username %}" > {% endcomment %}
+                    {{m.user.username}}
+
+                    {% if user.role == 'administrator'%}
+                    
+                    <button class="btn btn-small" type="submit" name = "action" value = "deletem" >x</button>
+                    {% endif %}
+                    {% comment %} </form> {% endcomment %}
+                    {% comment %} </a> {% endcomment %}
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+
+              <div class="d-flex border-top stats">
+                 {% comment %} <button class="btn btn-success col-6" type="submit" name = "action" value = "join">Join this group</button> {% endcomment %}
+
+                 {% if user.role == 'administrator'%}
+                 <button class="btn btn-success col-6" type="submit" name = "action" value = "delete">Delete this group</button>
+                 {% endif %}
+              </div>
+            </div>
+            </form>
+          {% endfor %}
+
+
+          </div>
+      </div>
+  </div>
+
+
+
+        <br><br>
+        <div class="row justify-content-center">
+        {% if user.role == 'administrator'%}
+          <div class="col-7 text-center">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#myModal" type="button">Create a new group</button>
+          </div>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+
+           <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                            </button> 
+                <h4 class="modal-title" id="myModalLabel">
+                    create group
+                </h4>
+            </div>
+             <div class="modal-body" style="height: 100%;">
+             <div id="error-message" align="center"></div> 
+             <form id="add-form" enctype="multipart/form-data"  action = "{% url 'create_group' %}" method="post">    
+             
+                {% for field in gform.visible_fields %}
+                <div class = "col-12">
+                    {{field.label_tag}}
+                    {{field}}
+                    {% comment %} <span class='error'>{{field.errors}}</span> {% endcomment %}
+                </div>
+                {% endfor %} 
+                 {% comment %} {% csrf_token %}
+                  <p>{{gform.as_p}}</p> {% endcomment %}
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+                <button  class="btn btn-primary" id = "submit-create" > submit </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+{##}
+
+
+  <script type="text/javascript">
+  //function create(){
+   var btn = document.getElementById("submit-create");
+    btn.addEventListener('click', function(e) {
+      console.log("1");
+      var form = $("#add-form");
+      var url = form.attr('action');
+      $.ajax({
+           type: "POST",
+           url: "../create_group_1/",
+           enctype: 'multipart/form-data',
+           data: form.serialize(), // serializes the form's elements.
+           success: function(data)
+           {
+               if (data['error'] == "") {
+
+                alert("Create group successful");
+                form.submit();
+               } else {
+                alert("Group already exist, please try again!");
+                 var div = $("#error-message");
+                 error = data['error']
+               }
+
+           }
+         });
+    })
+  //}
+
+  </script>
+{% endblock %}
