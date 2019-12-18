@@ -1,0 +1,65 @@
+Deployment Document
+
+--resource-group webprojboomRG
+--postgresql-name webtartandb
+--admin-username tartanadminuser
+--admin-password Woshimima666
+
+--db_name webfinalprojdb
+--db_username finalprojdbuser
+--db_password Finalprojdb666
+
+--user_name webfinalappuser
+--password Appmima666
+--app-service-plan webtartanzoneplan
+--app-name cmutartanzoneapp
+
+--git https://webfinalappuser@cmutartanzoneapp.scm.azurewebsites.net/cmutartanzoneapp.git
+
+
+superuser
+superuser123
+
+
+
+
+
+az group create --name webprojboomRG --location "North Central US"
+
+az postgres server create --resource-group webprojboomRG --name webtartandb --location "North Central US" --admin-user tartanadminuser --admin-password Woshimima666 --sku-name B_Gen5_1
+
+az postgres server firewall-rule create --resource-group webprojboomRG --server-name webtartandb --start-ip-address=0.0.0.0 --end-ip-address=0.0.0.0 --name AllowAllAzureIPs
+
+az postgres server firewall-rule create --resource-group webprojboomRG --server-name webtartandb --start-ip-address=73.154.255.47 --end-ip-address=73.154.255.47 --name AllowLocalClient
+
+az postgres server firewall-rule create --resource-group webprojboomRG --server-name webtartandb --start-ip-address=128.237.208.50 --end-ip-address=128.237.208.50 --name AllowLocalClient
+
+psql -h webtartandb.postgres.database.azure.com -U tartanadminuser@webtartandb postgres
+
+CREATE DATABASE webfinalprojdb;
+CREATE USER finalprojdbuser WITH PASSWORD 'Finalprojdb666';
+GRANT ALL PRIVILEGES ON DATABASE webfinalprojdb TO finalprojdbuser;
+
+
+export DBHOST="webtartandb.postgres.database.azure.com"
+export DBUSER="finalprojdbuser@webtartandb"
+export DBNAME="webfinalprojdb"
+export DBPASS="Finalprojdb666"
+
+
+
+az webapp deployment user set --user-name webfinalappuser --password Appmima666
+
+az appservice plan create --name webtartanzoneplan --resource-group webprojboomRG --sku B1 --is-linux
+
+az webapp create --resource-group webprojboomRG --plan webtartanzoneplan --name cmutartanzoneapp --runtime "PYTHON|3.7" --deployment-local-git
+
+az webapp config appsettings set --name cmutartanzoneapp --resource-group webprojboomRG --settings DBHOST="webtartandb.postgres.database.azure.com" DBUSER="finalprojdbuser@webtartandb" DBPASS="Finalprojdb666" DBNAME="webfinalprojdb"
+
+
+change users
+change database
+migrate
+
+
+

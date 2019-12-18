@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>{% block title %}{% endblock %}</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/group_discussion.css' %}" rel="stylesheet">
+  <link href="{% static 'css/group_discussion1.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <div class="d-flex" id="wrapper">
+
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+      <div class="sidebar-heading">Group Discussion</div>
+      <div class="list-group list-group-flush">
+        <a href="#" class="list-group-item list-group-item-action bg-light">
+          <div>
+            When should we have a meeting?
+          </div>
+          <small>post by user1 on 11/3/2019</small>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action bg-light">
+          <div>
+            How to solve this problem?
+          </div>
+          <small>post by user1 on 11/3/2019</small>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action bg-light">
+          <div>
+            post2 title
+          </div>
+          <small>post by user2 on 11/3/2019</small>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action bg-light">
+          <div>
+            post3 title
+          </div>
+          <small>post by user3 on 11/3/2019</small>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action bg-light">
+          <div>
+            post4 title
+          </div>
+          <small>post by user4 on 11/3/2019</small>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action bg-light">
+          <div>
+            post5 title
+          </div>
+          <small>post by user5 on 11/3/2019</small>
+        </a>
+      </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <a class="btn btn-primary" id="menu-toggle" href="{% url 'new_post' %}">New Post</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'my_group' %}">My group <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'my_course' %}">My course</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Username
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="container-fluid">
+        {% block content %}
+        <h1 class="mt-4">{% block post_title %}When should we have a meeting?{% endblock %}</h1>
+        <p>
+          {% block post_content %}
+          The starting state of the menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will change.
+          {% endblock %}
+        </p>
+
+      <br></br>
+      <div class="card">
+        <div class="card-header">
+          Answers
+        </div>
+        <div class="card-body">
+          {% block answers %}
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+          <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+          <hr>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+          <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+          {% endblock %}
+        </div>
+      </div>
+      <br></br>
+      <div class="card">
+        <div class="card-header">
+          My Answer
+        </div>
+        <div class="form-group">
+          <label id="your-answer" for="exampleFormControlTextarea3">Type your answer to this post:</label>
+          <textarea class="form-control" id="exampleFormControlTextarea6" placeholder="Write something here..." name="textarea" rows="7"></textarea>
+          <div>
+          <button id="submit-answer" name="submit-answer" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+      {% endblock %}
+      <br></br>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+
+  <!-- Menu Toggle Script -->
+  <script>
+    $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+    });
+  </script>
+
+</body>
+
+</html>

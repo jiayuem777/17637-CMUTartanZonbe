@@ -1,0 +1,78 @@
+
+{% extends "tartanzone/nav_base.html"%}
+
+{% block contents%}
+    <div class="intro-section single-cover" id="home-section">
+
+      <div class="slide-1 " style="background-image: url('/static/images/img_2.jpg');" data-stellar-background-ratio="0.5">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-12">
+              <div class="row justify-content-center align-items-center text-center">
+                <div class="col-lg-6">
+                  <br>
+                  <h1 data-aos="fade-up" data-aos-delay="0">My Zone</h1>
+                  <p data-aos="fade-up" data-aos-delay="100">My courses</p>
+                  <a data-aos="fade-up" href=" {% url 'scheduel' %}" class="btn btn-primary">scheduel</a >
+                </div>
+
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+              {% if course %}
+              {% for c in course %}
+
+              <div class="course bg-white h-100 align-self-stretch col-lg-4 col-sm-6">
+                <figure class="m-0">
+                {% if c.course_img.url %}
+                  <a href="{% url 'my_course_review' c.id %}"><img src="{{ c.course_img.url }}" alt="Image" class="img-fluid"></a>
+                {% else %}
+                    <a href="{% url 'my_course_review' c.id %}"><img src="{{ c.course_img.url }}" alt="Image" class="img-fluid"></a>
+                {% endif %}
+
+                </figure>
+                <div class="course-inner-text py-4 px-4">
+                  <span class="course-price">{{c.code}}</span>
+                  <div class="meta">{{c.time}}</div>
+                  <h3><a href="{% url 'my_course_review' c.id %}">{{c.name}}</a></h3>
+                  <p class="line-limit-length">{{c.description}}</p>
+                </div>
+              </div>
+              {% endfor %}
+              {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section courses-title bg-dark" id="courses-section">
+      <div class="container">
+        <div class="row mb-5 justify-content-center">
+          <div class="col-lg-7 text-center" data-aos="fade-up" data-aos-delay="">
+            <br><br>
+            <h2 class="section-title">Add a new course here</h2>
+            <button class="btn btn-default"><a href="{% url 'all_courses' %}">Add</a></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style type="text/css">
+    .line-limit-length{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    }
+    </style>
+
+{% endblock %}

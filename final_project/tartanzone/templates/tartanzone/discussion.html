@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Group Discussion</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/discussion.css' %}">
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Group Discussion</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+              <ul class="list-unstyled CTAs">
+                <li>
+                    <a href="{% url 'new_post' group.id %}" class="download">New Post</a>
+                </li>
+              </ul>
+                <li>
+                    <a href="#todaySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Today</a>
+                    <ul class="collapse list-unstyled" id="todaySubmenu">
+                        {% if today %}
+                        {% for p in today %}
+                        <li>
+                            <a href="{% url 'group_discussion' group.id p.id %}">{{p.name}}
+                              <br>
+                            <small>Posted by {{p.student.user.first_name}} {{p.student.user.last_name}} at {{p.time}}</small>
+                            </a>
+                        </li>
+                        {% endfor %}
+                        {% endif %}
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#yesterSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Yesterday</a>
+                    <ul class="collapse list-unstyled" id="yesterSubmenu">
+                      {% if yesterday %}
+                      {% for p in yesterday %}
+                      <li>
+                          <a href="{% url 'group_discussion' group.id p.id %}">{{p.name}}
+                            <br>
+                          <small>Posted by {{p.student.user.first_name}} {{p.student.user.last_name}} at {{p.time}}</small>
+                          </a>
+                      </li>
+                      {% endfor %}
+                      {% endif %}
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#thisSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">This Week</a>
+                    <ul class="collapse list-unstyled" id="thisSubmenu">
+                      {% if thisweek %}
+                      {% for p in thisweek %}
+                      <li>
+                          <a href="{% url 'group_discussion' group.id p.id %}">{{p.name}}
+                            <br>
+                          <small>Posted by {{p.student.user.first_name}} {{p.student.user.last_name}} at {{p.time}}</small>
+                          </a>
+                      </li>
+                      {% endfor %}
+                      {% endif %}
+                    </ul>
+                </li>
+
+
+                <li>
+                    <a href="#moreSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Older</a>
+                    <ul class="collapse list-unstyled" id="moreSubmenu">
+                      {% if moreold %}
+                      {% for p in moreold %}
+                      <li>
+                          <a href="{% url 'group_discussion' group.id p.id %}">{{p.name}}
+                            <br>
+                          <small>Posted by {{p.student.user.first_name}} {{p.student.user.last_name}} at {{p.time}}</small>
+                          </a>
+                      </li>
+                      {% endfor %}
+                      {% endif %}
+                    </ul>
+                </li>
+
+            </ul>
+
+
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="btn btn-info">
+                        <i class="fas fa-align-left"></i>
+                        <span>Toggle Sidebar</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{% url 'my_group' %}">My group</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'my_course' %}">My course</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'all_courses' %}">All courses</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+
+            {% if post %}
+            <h2>{{post.name}}</h2><br>
+            <p style="color:black;">{{post.content}}</p>
+            <div align="right">
+
+              {% if owner %}
+
+              <button class="btn btn-primary" id="btn-js"><a href="#">Edit</a></button>
+              {% endif %}
+            </div>
+
+
+            <div class="line"></div>
+
+            <h2>Replies: </h2><br>
+
+            {% for r in post.postanswer.all %}
+            <div id="answers">
+              <p id="answer-content" style="color:black;">{{r.content}}</p>
+              <div align="right">
+                <small>Posted by {{r.student.user.first_name}} {{r.student.user.last_name}} on {{r.time}}</small>
+
+                <button name="reply-postanswer" class="btn btn-primary reply-postanswer" value="{{r.id}}">Reply</button>
+                <a href="{% url 'delete_postanswer' group.id post.id r.id %}" name="delete-postanswer" class="btn btn-danger delete-postanswer" value="{{r.id}}">Delete</a>
+              </div>
+
+              <ul class="children">
+                <form action="{% url 'reply_postanswer' group.id post.id r.id %}" method="POST" id="{{r.id}}">
+                  {% csrf_token %}
+                </form>
+                {% for rr in r.postanswerreply.all %}
+                <div class="line"></div>
+                  <div class="comment-body">
+                    <p>Reply: {{rr.content}}</p>
+                    <div align="right"><small>Replied by {{rr.student.user.first_name}} {{rr.student.user.last_name}} on {{rr.time}}</small></div>
+                  </div>
+                {% endfor %}
+              </ul>
+              <hr>
+            </div>
+            {% endfor %}
+            <div class="line"></div>
+
+            <h2>My Answers</h2>
+            <form action="{% url 'group_discussion' group.id post.id %}" method="post">
+              {% csrf_token %}
+              <textarea class="form-control" id="exampleFormControlTextarea6" placeholder="Write something here..." name="textarea" rows="7" required></textarea>
+              <br>
+              <button type='submit' name='submit-answer' class='btn btn-primary'>Submit</button>
+            </form>
+
+            <div class="line"></div>
+
+        {% endif %}
+    </div>
+
+    {% if post %}
+    <div class="modal fade" id="mymodal">
+  <!-- modal-dialog水平居中 -->
+    <div class="modal-dialog modal-sm" >
+      <div class="modal-content " style="width:450px;">
+        <div class="modal-header">
+          <!-- 给一个元素data-dimiss属性的话，可以通过点击该元素达到让目标消失的效果。 -->
+          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+          <h4 class="modal-title">Add a course:</h4>
+        </div>
+
+        <form method="post" action="{% url 'edit_post' post.id group.id %}">
+        <div class="modal-body">
+
+            {% csrf_token %}
+              <div class="form-group">
+                <label for="exampleInputEmail1" id="post-title-label">Post Title</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter title" name="post-title" value="{{post.name}}">
+              </div>
+                <label id="your-answer" for="exampleFormControlTextarea3">Post description:</label>
+                <textarea class="form-control" id="exampleFormControlTextarea6" placeholder="Write something here..." name="post-content" rows="7">{{post.content}}</textarea>
+              <br>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <input type="submit" value="Update" class="btn btn-primary">
+        </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+            var replyBtn = document.getElementsByClassName("reply-postanswer");
+            console.log(replyBtn);
+            for (var i = 0; i < replyBtn.length; i++) {
+              replyBtn[i].addEventListener('click', function(e) {
+                var btn = e.target;
+                var form = document.getElementById(btn.value);
+
+                var replyLabel = document.createElement("label");
+                var node1 = document.createTextNode("Reply to this answer:");
+                replyLabel.appendChild(node1);
+                form.appendChild(replyLabel);
+
+                var textarea = $("<textarea/>", {
+                  "class": "form-control",
+                  id: "exampleFormControlTextarea6",
+                  name: "reply-textarea",
+                  "placeholder": "Write something here...",
+                  "rows": "5"
+                }).appendTo(form);
+
+                var br = document.createElement("br");
+                form.appendChild(br);
+
+                var submit = $("<button/>", {
+                  "class": "btn btn-primary",
+                  html: "Submit",
+                  type: "submit",
+                  name: "reply-submit",
+                  value: btn.value
+                }).appendTo(form);
+
+                console.log(form);
+
+              });
+            }
+        });
+
+        $('#btn-js').click(function() {
+          $('#mymodal').modal({
+            backdrop: "static"
+          })
+        })
+
+        $('.btn-edit').click(function() {
+          var id=this.id
+          //alert(id);
+          $('#edit_'+id).modal({
+            backdrop: "static"
+          })
+        })
+
+
+    </script>
+
+</body>
+
+</html>

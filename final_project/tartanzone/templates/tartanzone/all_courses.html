@@ -1,0 +1,276 @@
+{% extends "tartanzone/nav_base.html"%}
+
+{% block contents%}
+
+    <div class="intro-section single-cover" id="home-section">
+
+      <div class="slide-1 " style="background-image: url('/static/images/img_2.jpg');" data-stellar-background-ratio="0.5">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-12">
+              <div class="row justify-content-center align-items-center text-center">
+                <div class="col-lg-6">
+                  <br>
+                  <h1 data-aos="fade-up" data-aos-delay="0">My Zone</h1>
+                  <p data-aos="fade-up" data-aos-delay="100">All courses</p>
+                  <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Search
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <div style="margin: 20px;">
+                        <form action="{% url 'search_course' %}" method="post">
+                          {% csrf_token %}
+                          <select name="search-by" id=" search-by"height="42px" width="50px" required>
+                            <option value ="code">Code</option>
+                            <option value ="name">Name</option>
+                            <option value ="day">Day</option>
+                            <option value ="quota">Quota</option>
+                            <option value ="semester">Semester</option>
+                          </select>
+
+                          <input type="text" placeholder="  search..." name="search-input" id="search-input" required>
+                          <button type="submit" name="search-submit" id="search-btn" class="btn btn-primary">Search</button>
+                        </form>
+                      </div>
+
+
+                    </div>
+                  </div>
+                  {% if admin %}
+                  <br>
+                  <button class="btn" data-toggle="modal" data-target="#mymodal" type="button">Add a course</button>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section">
+      <div class="container">
+
+
+        <div class="row" align="center">
+          {% if search %}
+          <div>{{search}}</div>
+          <br><br><br>
+          {% endif %}
+          {% if no_found_name %}
+          <p>No course with such name!</p>
+          {% endif %}
+          {% if no_found_code %}
+          <p>No course with such code!</p>
+          {% endif %}
+          {% if no_found_day %}
+          <p>No course with such day!</p>
+          {% endif %}
+          {% if no_found_quota %}
+          <p>No course with such quota!</p>
+          {% endif %}
+          {% if no_found_semester %}
+          <p>No course with such semester!</p>
+          {% endif %}
+        </div>
+{#      <div class="col-lg-12" align="center">#}
+{#          <button type="button" class="btn btn-light">Ascending Order</button>#}
+{#          <button type="button" class="btn btn-light">Descending Order</button>#}
+{#          <br><br><br>#}
+{#      </div>#}
+          <div class="row">
+              {% if course %}
+              {% for c in course %}
+
+              <div class="course bg-white h-100 align-self-stretch col-lg-4 col-sm-6">
+                <figure class="m-0">
+                {% if c.course_img.url %}
+                  <a href="{% url 'course_review' c.id %}"><img src="{{ c.course_img.url }}" alt="Image" class="img-fluid"></a>
+                {% else %}
+                    <a href="{% url 'course_review' c.id %}"><img src='/static/images/img_2.jpg' alt="Image" class="img-fluid"></a>
+                {% endif %}
+                </figure>
+                <div class="course-inner-text py-4 px-4">
+                  <span class="course-price">{{c.code}}</span>
+                  <div class="meta">{{c.time}}</div>
+                  <h3><a href="{% url 'course_review' c.id %}">{{c.name}}</a></h3>
+                  <p class="line-limit-length">{{c.description}}</p>
+                  {% if admin %}
+                  <button class="btn btn-primary btn-edit" id="{{c.id}}" data-toggle="modal" data-target="#edit_{{c.id}}" >Edit</button>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="modal fade editmodal" id="edit_{{c.id}}">
+            <!-- modal-dialog水平居中 -->
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content" style="width:600px;">
+                  <div class="modal-header">
+                    <!-- 给一个元素data-dimiss属性的话，可以通过点击该元素达到让目标消失的效果。 -->
+                    <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                    <h4 class="modal-title">Edit</h4>
+                    <h5 class="modal-title">{{c.name}}</h5>
+                  </div>
+                  <form method="post" id="edit-form" action="{% url 'edit_course' c.id %}">
+                    {% csrf_token %}
+                  <div class="modal-body">
+                    <p>
+                      Code: <input class="form-control" type="number" min="10000" max="99999" value="{{c.code}}" id="user_id" name="course_code"/>
+                      <br><br>
+                      Name: <input class="form-control" type="text" value="{{c.name}}" id="user_name" name="course_name"/>
+                      <br><br>
+                      Semester: <select name="course_semester" id=" search-by"height="42px" width="100px" required>
+                        <option value ="F" {% if c.semester == "F"%} selected="selected" {% endif %}>fall</option>
+                        <option value ="S" {% if c.semester == "S"%} selected="selected" {% endif %}>spring</option>
+                        <option value ="FS" {% if c.semester == "FS"%} selected="selected" {% endif %}>fall/spring</option>
+                      </select>
+                      <br><br>
+                      Description:
+                      <textarea class="form-control" style="height:150px;" name="course_description" required>{{c.description}}</textarea>
+                      <br><br>
+                    </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Update" class="btn btn-primary">
+                    <a href="{% url 'delete_course' c.id %}"><button type="button" class="btn btn-primary">Delete</button></a>
+                  </div>
+
+                  </form>
+
+
+                </div>
+              </div>
+            </div>
+              {% endfor %}
+              {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- .site-wrap -->
+
+  <div class="modal fade" id="mymodal">
+<!-- modal-dialog水平居中 -->
+  <div class="modal-dialog modal-sm" >
+    <div class="modal-content " style="width:700px;">
+      <div class="modal-header">
+        <!-- 给一个元素data-dimiss属性的话，可以通过点击该元素达到让目标消失的效果。 -->
+        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+        <h4 class="modal-title">Add a course:</h4>
+      </div>
+
+      <div id="error-message" align="center"></div>
+      <form method="post" action="{% url 'add_course' %}" id="add-form" enctype="multipart/form-data">
+      <div class="modal-body">
+
+          {% csrf_token %}
+        <p>{{form.as_p}}</p>
+
+      </div>
+
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button id="submit-add" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+  <style type="text/css">
+    .line-limit-length{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    }
+
+
+  .dropdown-menu {
+    width: 500px;
+  }
+
+
+  #search-input {
+  	width:50%;
+  	height:42px;
+  }
+
+  #search-by {
+  	height:42px;
+  }
+
+  #search-btn {
+  	height:42px;
+
+  }
+
+    select{
+        height: 40px;
+    }
+
+  </style>
+
+
+  <script type="text/javascript">
+    var btn = document.getElementById("submit-add");
+    btn.addEventListener('click', function(e) {
+      console.log("1");
+      var form = $("#add-form");
+      var url = form.attr('action');
+
+      $.ajax({
+           type: "POST",
+           url: "{% url 'ajax_add_course' %}",
+           enctype: 'multipart/form-data',
+           data: form.serialize(), // serializes the form's elements.
+           success: function(result)
+           {
+               console.log("1");
+               if (result['error'] == "") {
+
+                 form.submit();
+               } else {
+                 var div = $("#error-message");
+                 error = result['error']
+                 console.log(result['error']);
+                 var p1 = $("<p/>", {
+                   html: error['code']
+                 }).appendTo(div)
+                 var p2 = $("<p/>", {
+                   html: error['semester']
+                 }).appendTo(div)
+                 var p2 = $("<p/>", {
+                   html: "course_img: " + error['course_img']
+                 }).appendTo(div)
+               }
+
+           }
+         });
+    })
+
+    $('#btn-js').click(function() {
+      $('#mymodal').modal({
+        backdrop: "static"
+      })
+    })
+
+    $('.btn-edit').click(function() {
+      var id=this.id
+      //alert(id);
+      $('#edit_'+id).modal({
+        backdrop: "static"
+      })
+    })
+  </script>
+
+  {% comment %} </body>
+</html> {% endcomment %}
+{% endblock %}
